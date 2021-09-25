@@ -1,1 +1,95 @@
 /* You can add global styles to this file, and also import other style files */
+html, body{
+    height: 100%;
+}
+
+div{
+    //border: 1px dashed red;
+}
+
+/*Buttons*/
+.button-row{
+    display: flex;
+    justify-content: center;
+}
+.button-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 30px;
+    span{
+        margin-top: 4px;
+        font-size: 8px;
+        margin-bottom: 4px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    &:hover{
+        span{
+            opacity: 1;
+        }
+    }
+    button{    
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        background: none;
+        cursor: pointer;
+        display: inline-block;
+        
+        text-transform: uppercase;
+        outline: none;
+        position: relative;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+        border: 2px solid white;
+        border-radius: 0;
+        line-height: 1;
+        &:hover{
+            
+            border: 2px solid black;
+            border-radius: 8px;
+        }
+        &.active{
+            background-color: black;
+            color: white;
+            border-radius: 8px;
+        }
+    }
+}
+.gof-wrapper{
+    display: flex;
+    justify-content: center;
+}
+
+// p 
+p{
+    &.error{
+        color: red;
+        font-size: 10px;
+    }
+}
+
+// table
+$cell-width: 8px;
+$cell-height: 8px;
+table{
+    
+    tr{
+        td{
+            width: $cell-width;
+            height: $cell-height;
+            border: 1px solid rgb(148, 148, 148);
+            cursor: pointer;
+            user-select: none;
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -o-user-select: none;
+            &.alive{
+                background-color: black;
+            }
+        }
+    }
+}
