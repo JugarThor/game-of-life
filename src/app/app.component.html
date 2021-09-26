@@ -38,6 +38,21 @@
     <div class="col-12">
       <p class="small text-center"><i>Edit mode active</i></p>
     </div>
+    <div class="draws">
+      <div class="draw-button" *ngFor="let draw of availableDraws" (click)="selectDraw(draw)" [ngClass]="{'active': draw === selectedDraw}">
+        <div class="draw" >
+          <div class="gof-wrapper">
+            <table *ngIf="draw.drowPanel">
+              <tr *ngFor="let rows of draw.drowPanel; let y = index">
+                <td *ngFor="let cell of rows; let x = index"
+                [ngClass]="{'alive': cell.status}"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <span>{{draw.name}}</span>
+      </div>
+    </div>
   </div>
   <div class="row" *ngIf="errors">
     <div class="col-12">
@@ -55,7 +70,7 @@
         <tr *ngFor="let rows of gof.panel; let y = index">
           <td *ngFor="let cell of rows; let x = index"
           [ngClass]="{'alive': cell.status}"
-          (click)="changeCellStatus(cell)"></td>
+          (click)="changeCellStatus(cell, x, y)"></td>
         </tr>
       </table>
     </div>

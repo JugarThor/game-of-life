@@ -166,6 +166,46 @@ class GameOfLife {
       if (countAlive == 3) cell.reviveInNextStep();
     }
   }
+
+  printDraw(draw: Draw, x: number, y: number): void {
+    const rows: number = draw.drowPanel.length;
+    const cols: number = draw.drowPanel[0].length;
+
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        let xprima = x + j;
+        let yprima = y + i;
+        yprima = yprima > this.rows - 1 ? 0 : yprima;
+        xprima = xprima > this.cols - 1 ? 0 : xprima;
+        this.panel[yprima][xprima].status = draw.drowPanel[i][j].status;
+      }
+    }
+  }
+}
+
+// model draw object
+interface DrawObject {
+  grid: number[][];
+}
+
+// MODEL DRAW
+class Draw {
+  public name: string;
+  public draw: DrawObject;
+  public drowPanel: Cell[][];
+  constructor(name: string, draw: DrawObject) {
+    this.name = name;
+    this.draw = draw;
+    this.build();
+  }
+
+  build(): void {
+    this.drowPanel = this.draw.grid.map((row) => {
+      return row.map((cellStatus: number) => {
+        return new Cell(!!cellStatus);
+      });
+    });
+  }
 }
 
 @Component({
@@ -182,20 +222,74 @@ export class AppComponent {
 
   public errors: boolean = false;
   public stringError: string;
+
+  public spaceShipRight: DrawObject = {
+    grid: [
+      [1, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 1],
+      [0, 1, 1, 1, 1],
+    ],
+  };
+  public spaceShipLeft: DrawObject = {
+    grid: [
+      [0, 1, 0, 0, 1],
+      [1, 0, 0, 0, 0],
+      [1, 0, 0, 0, 1],
+      [1, 1, 1, 1, 0],
+    ],
+  };
+  public spaceShipUp: DrawObject = {
+    grid: [
+      [0, 1, 1, 1],
+      [1, 0, 0, 1],
+      [0, 0, 0, 1],
+      [0, 0, 0, 1],
+      [1, 0, 1, 0],
+    ],
+  };
+  public spaceShipDown: DrawObject = {
+    grid: [
+      [1, 0, 1, 0],
+      [0, 0, 0, 1],
+      [0, 0, 0, 1],
+      [1, 0, 0, 1],
+      [0, 1, 1, 1],
+    ],
+  };
+  public miniShipDiagonalRight: DrawObject = {
+    grid: [
+      [0, 1, 0],
+      [0, 0, 1],
+      [1, 1, 1],
+    ],
+  };
+  public availableDraws: Draw[] = [
+    new Draw('SpaceShip-right', this.spaceShipRight),
+    new Draw('SpaceShip-left', this.spaceShipLeft),
+    new Draw('SpaceShip-up', this.spaceShipUp),
+    new Draw('SpaceShip-down', this.spaceShipDown),
+
+    new Draw('MinishipDiagonal-right', this.miniShipDiagonalRight),
+  ];
+  public selectedDraw: Draw;
+
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.gof);
-  }
+  ngOnInit(): void {}
 
-  changeCellStatus(cell: Cell): void {
+  changeCellStatus(cell: Cell, x: number, y: number): void {
     this.clearError();
     if (this.editMode) {
-      cell.toggleCell();
-      if (cell.status) {
-        this.gof.population++;
+      if (this.selectedDraw) {
+        this.gof.printDraw(this.selectedDraw, x, y);
       } else {
-        this.gof.population--;
+        cell.toggleCell();
+        if (cell.status) {
+          this.gof.population++;
+        } else {
+          this.gof.population--;
+        }
       }
     } else {
       this.sendError(
@@ -237,6 +331,14 @@ export class AppComponent {
 
   setVelocity(event: any): void {
     this.gof.setInterval(event);
+  }
+
+  selectDraw(draw: Draw) {
+    if (this.selectedDraw === draw) {
+      this.selectedDraw = null;
+    } else {
+      this.selectedDraw = draw;
+    }
   }
 
   clearError(): void {
