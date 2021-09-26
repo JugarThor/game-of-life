@@ -7,6 +7,7 @@ import {
   spaceShipUp,
   spaceShipDown,
   miniShipDiagonalRight,
+  miniShipsGeneratorMachine,
 } from '@providers/drawins/drawings';
 
 @Component({
@@ -24,6 +25,7 @@ export class DrawingMenuComponent implements OnInit {
     new Drawing('SpaceShip-up', spaceShipUp),
     new Drawing('SpaceShip-down', spaceShipDown),
     new Drawing('MinishipDiagonal-right', miniShipDiagonalRight),
+    new Drawing('MinishipGeneratorMachine', miniShipsGeneratorMachine),
   ];
 
   constructor() {}
