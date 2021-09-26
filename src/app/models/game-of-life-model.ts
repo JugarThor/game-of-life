@@ -83,28 +83,23 @@ export class GameOfLife {
    */
   oneIteration(): void {
     this.steps++;
-    for (let y = 0; y < this.rows; y++) {
-      for (let x = 0; x < this.cols; x++) {
-        const cell = this.panel[y][x];
+    let cellsThatAreChanged: Cell[] = [];
+    this.panel.map((row: Cell[], y: number) => {
+      row.map((cell: Cell, x: number) => {
         this.checkCell(cell, x, y);
-      }
-    }
-    this.changeCellStatus();
+        if (cell.status != cell.nextStatus) cellsThatAreChanged.push(cell);
+      });
+    });
+    this.changeCellStatus(cellsThatAreChanged);
   }
 
   /**
-   * Change the cell to next status
+   * Change only the cells that has been changed
    */
-  changeCellStatus(): void {
-    for (let y = 0; y < this.rows; y++) {
-      for (let x = 0; x < this.cols; x++) {
-        const cellProcess = this.panel[y][x].nextStep();
-
-        if (cellProcess.changed) {
-          this.population += cellProcess.currentStatus ? 1 : -1;
-        }
-      }
-    }
+  changeCellStatus(cellsThatAreChanged: Cell[]): void {
+    cellsThatAreChanged.map((cell: Cell) => {
+      cell.nextStep();
+    });
   }
 
   /**
@@ -149,7 +144,7 @@ export class GameOfLife {
       }
     }
 
-    if (this.panel[y][x].status) {
+    if (cell.status) {
       // is alive
       if (countAlive === 2 || countAlive === 3) {
         cell.reviveInNextStep();
@@ -168,19 +163,16 @@ export class GameOfLife {
    * @param x position (col)
    * @param y position (row)
    */
-  printDraw(draw: Drawing, x: number, y: number): void {
-    const rows: number = draw.drowPanel.length;
-    const cols: number = draw.drowPanel[0].length;
-
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
+  printDraw(drawing: Drawing, x: number, y: number): void {
+    drawing.drawingPanel.map((row: Cell[], i: number) => {
+      row.map((cell: Cell, j: number) => {
         let xprima = x + j;
         let yprima = y + i;
         yprima = yprima > this.rows - 1 ? 0 : yprima;
         xprima = xprima > this.cols - 1 ? 0 : xprima;
-        this.panel[yprima][xprima].status = draw.drowPanel[i][j].status;
-        if (draw.drowPanel[i][j].status) this.population++;
-      }
-    }
+        this.panel[yprima][xprima].status = drawing.drawingPanel[i][j].status;
+        if (drawing.drawingPanel[i][j].status) this.population++;
+      });
+    });
   }
 }
