@@ -7,7 +7,7 @@
   <div class="row">
     <div class="col-12 button-row">
       <div class="button-wrapper">
-        <button (click)="gof.clear(gof.panel, true)"><i class="material-icons">restore</i></button>
+        <button (click)="gof.clear()"><i class="material-icons">restore</i></button>
         <span>Clear panel</span>
       </div>
       <div class="button-wrapper">
@@ -30,7 +30,7 @@
     <div class="col-12">
       <div class="input-range-wrapper">
         <label>Steps interval</label>
-        <input type="range" min="0" max="500" step="1" [(ngModel)]="intervalVelocity" (ngModelChange)="setVelocity($event)"> <span>{{intervalVelocity}}</span>
+        <input type="range" min="0" max="200" step="1" [(ngModel)]="intervalVelocity" (ngModelChange)="setVelocity($event)"> <span>{{intervalVelocity}}</span>
       </div>
     </div>
   </div>
@@ -38,21 +38,7 @@
     <div class="col-12">
       <p class="small text-center"><i>Edit mode active</i></p>
     </div>
-    <div class="draws">
-      <div class="draw-button" *ngFor="let draw of availableDraws" (click)="selectDraw(draw)" [ngClass]="{'active': draw === selectedDraw}">
-        <div class="draw" >
-          <div class="gof-wrapper">
-            <table *ngIf="draw.drowPanel">
-              <tr *ngFor="let rows of draw.drowPanel; let y = index">
-                <td *ngFor="let cell of rows; let x = index"
-                [ngClass]="{'alive': cell.status}"></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-        <span>{{draw.name}}</span>
-      </div>
-    </div>
+    <app-drawing-menu [selectedDraw]="selectedDraw" (onSelectDraw)="selectDraw($event)"></app-drawing-menu>
   </div>
   <div class="row" *ngIf="errors">
     <div class="col-12">
