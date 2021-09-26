@@ -27,6 +27,12 @@
         <span>Stop game</span>
       </div>
     </div>
+    <div class="col-12">
+      <div class="input-range-wrapper">
+        <label>Steps interval</label>
+        <input type="range" min="0" max="500" step="1" [(ngModel)]="intervalVelocity" (ngModelChange)="setVelocity($event)"> <span>{{intervalVelocity}}</span>
+      </div>
+    </div>
   </div>
   <div class="row" *ngIf="editMode">
     <div class="col-12">
@@ -41,7 +47,6 @@
   <div class="row">
     <div class="col-12">
       <p class="small text-center">Generación: {{gof.steps}} | Población: {{gof.population}}</p>
-
     </div>
   </div>
   <div class="row">

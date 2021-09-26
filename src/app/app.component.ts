@@ -3,9 +3,24 @@ import { interval, Subscription } from 'rxjs';
 
 class Cell {
   public status: boolean; // alive or death
+  public nextStatus: boolean;
 
   constructor(status: boolean = false) {
     this.status = status;
+    this.nextStatus = status;
+  }
+
+  nextStep(): void {
+    this.status = this.nextStatus;
+    this.nextStatus = false;
+  }
+
+  reviveInNextStep(): void {
+    this.nextStatus = true;
+  }
+
+  deadInNextStep(): void {
+    this.nextStatus = false;
   }
 
   revive(): void {
@@ -29,17 +44,30 @@ class GameOfLife {
   public cols: number; // x
   public rows: number; // y
   public panel: Cell[][] = [];
-  public panelNextStep: Cell[][] = [];
 
+  public interval: number;
   subscription: Subscription;
 
   public steps: number = 0;
   public population: number = 0;
 
-  constructor(cols: number, rows: number) {
+  /**
+   *
+   * @param cols number of cols
+   * @param rows number of rows
+   * @param interval in ms. Example: 1000 -> one step each 1 second.
+   */
+  constructor(cols: number, rows: number, interval: number = 100) {
     this.cols = cols;
     this.rows = rows;
+    this.interval = interval;
     this.build();
+  }
+
+  setInterval(time: number): void {
+    this.stop();
+    this.interval = time;
+    this.play();
   }
 
   build(): void {
@@ -50,27 +78,10 @@ class GameOfLife {
         this.panel[y].push(cell);
       }
     }
-    this.panelNextStep = this.deepcopy(this.panel);
-  }
-
-  deepcopy(matrix: Cell[][]): any {
-    this.population = 0;
-    let copy = [];
-    for (let y = 0; y < this.rows; y++) {
-      copy.push([]);
-      for (let x = 0; x < this.cols; x++) {
-        const cell = new Cell(matrix[y][x].status);
-        copy[y].push(cell);
-        if (matrix[y][x].status) {
-          this.population++;
-        }
-      }
-    }
-    return copy;
   }
 
   play(): void {
-    const source = interval(0);
+    const source = interval(this.interval);
     this.subscription = source.subscribe(() => {
       this.oneIteration();
     });
@@ -95,12 +106,19 @@ class GameOfLife {
     this.steps++;
     for (let y = 0; y < this.rows; y++) {
       for (let x = 0; x < this.cols; x++) {
-        const cell = this.panelNextStep[y][x];
+        const cell = this.panel[y][x];
         this.checkCell(cell, x, y);
       }
     }
-    this.panel = this.deepcopy(this.panelNextStep);
-    this.clear(this.panelNextStep);
+    this.changeCellStatus();
+  }
+
+  changeCellStatus(): void {
+    for (let y = 0; y < this.rows; y++) {
+      for (let x = 0; x < this.cols; x++) {
+        this.panel[y][x].nextStep();
+      }
+    }
   }
 
   checkCell(cell: Cell, x: number, y: number): void {
@@ -138,14 +156,14 @@ class GameOfLife {
       // is alive
       if (countAlive === 2 || countAlive === 3) {
         // stay alive
-        cell.revive();
+        cell.reviveInNextStep();
       } else {
         // death
-        cell.kill();
+        cell.deadInNextStep();
       }
     } else {
       // is death
-      if (countAlive == 3) cell.revive();
+      if (countAlive == 3) cell.reviveInNextStep();
     }
   }
 }
@@ -158,7 +176,9 @@ class GameOfLife {
 export class AppComponent {
   public playMode: boolean = false;
   public editMode: boolean = true;
-  public gof: GameOfLife = new GameOfLife(10, 10); // Game Of Life
+  public gof: GameOfLife = new GameOfLife(50, 50, 200); // Game Of Life
+
+  public intervalVelocity: number = 200;
 
   public errors: boolean = false;
   public stringError: string;
@@ -213,6 +233,10 @@ export class AppComponent {
     this.clearError();
     this.playMode = false;
     this.gof.stop();
+  }
+
+  setVelocity(event: any): void {
+    this.gof.setInterval(event);
   }
 
   clearError(): void {
