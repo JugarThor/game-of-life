@@ -2,8 +2,8 @@
     <div class="draw-button" *ngFor="let draw of availableDraws" (click)="selectDraw(draw)" [ngClass]="{'active': draw === selectedDraw}">
         <div class="draw" >
             <div class="gof-wrapper">
-                <table *ngIf="draw.drowPanel">
-                    <tr *ngFor="let rows of draw.drowPanel; let y = index">
+                <table *ngIf="draw.drawingPanel">
+                    <tr *ngFor="let rows of draw.drawingPanel; let y = index">
                         <td *ngFor="let cell of rows; let x = index"
                         [ngClass]="{'alive': cell.status}"></td>
                     </tr>
