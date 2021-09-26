@@ -1,11 +1,9 @@
+@import "variables";
 /* You can add global styles to this file, and also import other style files */
 html, body{
     height: 100%;
 }
 
-div{
-    //border: 1px dashed red;
-}
 
 /*Buttons*/
 .button-row{
@@ -16,13 +14,13 @@ div{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 15px 30px;
+    margin: $space-sm $space-md;
     span{
-        margin-top: 4px;
-        font-size: 8px;
-        margin-bottom: 4px;
+        margin-top: $space-xxs;
+        font-size: $fs-min;
+        margin-bottom: $space-xxs;
         opacity: 0;
-        transition: opacity 0.3s ease-in-out;
+        transition: $transition-default;
     }
     &:hover{
         span{
@@ -36,132 +34,126 @@ div{
         background: none;
         cursor: pointer;
         display: inline-block;
-        
         text-transform: uppercase;
         outline: none;
         position: relative;
-        -webkit-transition: all 0.3s;
-        -moz-transition: all 0.3s;
-        transition: all 0.3s;
-        border: 2px solid white;
+        transition: $transition-default;
+        border: 2px solid $color-white;
         border-radius: 0;
         line-height: 1;
         &:hover{
-            
-            border: 2px solid black;
-            border-radius: 8px;
+            border: 2px solid $color-black;
+            border-radius: $border-radius;
         }
         &.active{
-            background-color: black;
-            color: white;
-            border-radius: 8px;
+            background-color: $color-black;
+            color: $color-white;
+            border-radius: $border-radius;
         }
     }
 }
 .gof-wrapper{
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: $space-md;
 }
 
-// p 
 p{
     &.error{
-        color: red;
-        font-size: 10px;
+        color: $color-error;
+        font-size: $fs-small;
     }
 }
 
 
 // input range
-
 .input-range-wrapper {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;;
 
-    label{
-        font-size: 10px;
-        margin-bottom: 16px;
-    }
-    span{
-        margin-top: 8px;
-        font-size: 10px;
-    }
+  label{
+      font-size: $fs-small;
+      margin-bottom: $space-sm;
   }
-  
-  input[type='range'] {
-    display: block;
-    width: 250px;
+  span{
+      margin-top: $space-xs;
+      font-size: $fs-small;
   }
+}
   
-  input[type='range']:focus {
-    outline: none;
-  }
-  
-  input[type='range'],
-  input[type='range']::-webkit-slider-runnable-track,
-  input[type='range']::-webkit-slider-thumb {
-    -webkit-appearance: none;
-  }
-  
-  input[type=range]::-webkit-slider-thumb {
-    background-color: #777;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #333;
-    border-radius: 50%;
-    margin-top: -9px;
-  }
-  
-  input[type=range]::-moz-range-thumb {
-    background-color: #777;
-    width: 15px;
-    height: 15px;
-    border: 3px solid #333;
-    border-radius: 50%;
-  }
-  
-  input[type=range]::-ms-thumb {
-    background-color: #777;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #333;
-    border-radius: 50%;
-  }
-  
-  input[type=range]::-webkit-slider-runnable-track {
-    background-color: #777;
-    height: 3px;
-  }
-  
-  input[type=range]:focus::-webkit-slider-runnable-track {
-    outline: none;
-  }
-  
-  input[type=range]::-moz-range-track {
-    background-color: #777;
-    height: 3px;
-  }
-  
-  input[type=range]::-ms-track {
-    background-color: #777;
-    height: 3px;
-  }
-  
-  input[type=range]::-ms-fill-lower {
-    background-color: HotPink
-  }
-  
-  input[type=range]::-ms-fill-upper {
-    background-color: black;
-  } 
+input[type='range'] {
+  display: block;
+  width: 250px;
+}
+
+input[type='range']:focus {
+  outline: none;
+}
+
+input[type='range'],
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background-color: $color-grey-light;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $color-grey;
+  border-radius: 50%;
+  margin-top: -9px;
+}
+
+input[type=range]::-moz-range-thumb {
+  background-color: $color-grey-light;
+  width: 15px;
+  height: 15px;
+  border: 3px solid $color-grey;
+  border-radius: 50%;
+}
+
+input[type=range]::-ms-thumb {
+  background-color: $color-grey-light;
+  width: 20px;
+  height: 20px;
+  border: 3px solid $color-grey;
+  border-radius: 50%;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  background-color: $color-grey-light;
+  height: 3px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  outline: none;
+}
+
+input[type=range]::-moz-range-track {
+  background-color: $color-grey-light;
+  height: 3px;
+}
+
+input[type=range]::-ms-track {
+  background-color: $color-grey-light;
+  height: 3px;
+}
+
+input[type=range]::-ms-fill-lower {
+  background-color: HotPink
+}
+
+input[type=range]::-ms-fill-upper {
+  background-color: $color-black;
+} 
 
 // table
-$cell-width: 8px;
-$cell-height: 8px;
+$cell-width: $cell-width;
+$cell-height: $cell-width;
 table{
     
     tr{
@@ -176,37 +168,8 @@ table{
             -webkit-user-select: none;
             -o-user-select: none;
             &.alive{
-                background-color: black;
+                background-color: $color-black;
             }
-        }
-    }
-}
-
-.draws{
-    display: flex;
-    justify-content: space-between;
-    .draw-button{
-        border: 2px solid black;
-        border-radius: 8px;
-        cursor: pointer;
-        padding: 8px;
-        font-size: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        transition: all 0.3s ease-in-out;
-        &.active{
-          background-color: #ecebeb;
-        }
-        .draw{
-            .gof-wrapper{
-              margin-bottom: 0;
-            }
-            width: 50px;
-        }
-        &:hover, &.active{
-            box-shadow: 3px 4px 3px #949494;
         }
     }
 }
