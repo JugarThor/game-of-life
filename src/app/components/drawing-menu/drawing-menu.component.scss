@@ -1,0 +1,29 @@
+@import "variables";
+
+.draws{
+    display: flex;
+    justify-content: space-between;
+    .draw-button{
+        border: 2px solid $color-black;
+        border-radius: $border-radius;
+        cursor: pointer;
+        padding: $space-xs;
+        font-size: $fs-small;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s ease-in-out;
+        &.active{
+          background-color: $color-soft-grey;
+        }
+        .draw{
+            .gof-wrapper{
+              margin-bottom: 0;
+            }
+        }
+        &:hover, &.active{
+            box-shadow: 3px 4px 3px $color-grey-light;
+        }
+    }
+}
