@@ -13,6 +13,10 @@ export class GameOfLife {
   public steps: number = 0;
   public population: number = 0;
 
+  // live region
+  public minMaxRow: { min: number; max: number } = { min: 0, max: 0 };
+  public minMaxCol: { min: number; max: number } = { min: 0, max: 0 };
+
   /**
    *
    * @param cols number of cols
@@ -22,6 +26,8 @@ export class GameOfLife {
   constructor(cols: number, rows: number, interval: number = 100) {
     this.cols = cols;
     this.rows = rows;
+    this.minMaxRow.max = rows - 1;
+    this.minMaxCol.max = cols - 1;
     this.interval = interval;
     this.build();
   }
@@ -76,6 +82,8 @@ export class GameOfLife {
     }
     this.population = 0;
     this.steps = 0;
+    this.minMaxRow = { min: 0, max: this.rows - 1 };
+    this.minMaxCol = { min: 0, max: this.cols - 1 };
   }
 
   /**
@@ -84,12 +92,52 @@ export class GameOfLife {
   oneIteration(): void {
     this.steps++;
     let cellsThatAreChanged: Cell[] = [];
-    this.panel.map((row: Cell[], y: number) => {
-      row.map((cell: Cell, x: number) => {
+    let rowsAffected: number[] = [];
+    let colsAffected: number[] = [];
+
+    // only iterate through the region with alive cells
+    for (let y = this.minMaxRow.min; y <= this.minMaxRow.max; y++) {
+      for (let x = this.minMaxCol.min; x <= this.minMaxCol.max; x++) {
+        const cell: Cell = this.panel[y][x];
         this.checkCell(cell, x, y);
-        if (cell.status != cell.nextStatus) cellsThatAreChanged.push(cell);
-      });
-    });
+        if (cell.status != cell.nextStatus) {
+          cellsThatAreChanged.push(cell);
+        }
+        if (cell.nextStatus) {
+          if (!rowsAffected.includes(y)) rowsAffected.push(y);
+          if (!colsAffected.includes(x)) colsAffected.push(x);
+        }
+      }
+    }
+
+    if (rowsAffected.length === 0 && colsAffected.length === 0) {
+      this.stop();
+    } else {
+      const umbral: number = 1;
+      let minRow: number = Math.min(...rowsAffected) - umbral;
+      let maxRow: number = Math.max(...rowsAffected) + umbral;
+      let minCol: number = Math.min(...colsAffected) - umbral;
+      let maxCol: number = Math.max(...colsAffected) + umbral;
+
+      if (minRow < 0 || maxRow > this.rows - 1) {
+        minRow = 0;
+        maxRow = this.rows - 1;
+      }
+      if (minCol < 0 || maxCol > this.cols - 1) {
+        minCol = 0;
+        maxCol = this.cols - 1;
+      }
+
+      this.minMaxRow = {
+        min: minRow,
+        max: maxRow,
+      };
+      this.minMaxCol = {
+        min: minCol,
+        max: maxCol,
+      };
+    }
+
     this.changeCellStatus(cellsThatAreChanged);
   }
 

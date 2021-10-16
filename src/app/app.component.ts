@@ -11,7 +11,7 @@ import { Drawing, DrawingObject } from '@models/drawing.model';
 export class AppComponent {
   public playMode: boolean = false;
   public editMode: boolean = true;
-  public gof: GameOfLife = new GameOfLife(100, 50); // Game Of Life
+  public gof: GameOfLife = new GameOfLife(100, 100); // Game Of Life
 
   public intervalVelocity: number = 100;
 
