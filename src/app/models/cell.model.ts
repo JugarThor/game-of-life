@@ -28,6 +28,7 @@ export class Cell {
 
   kill(): void {
     this.status = false;
+    this.nextStatus = false;
   }
 
   toggleCell(): void {
