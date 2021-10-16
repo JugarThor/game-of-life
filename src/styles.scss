@@ -17,7 +17,7 @@ html, body{
     margin: $space-sm $space-md;
     span{
         margin-top: $space-xxs;
-        font-size: $fs-min;
+        font-size: $fs-small;
         margin-bottom: $space-xxs;
         opacity: 0;
         transition: $transition-default;
@@ -56,6 +56,7 @@ html, body{
     display: flex;
     justify-content: center;
     margin-bottom: $space-md;
+    overflow: auto;
 }
 
 p{
@@ -158,7 +159,7 @@ table{
     
     tr{
         td{
-            width: $cell-width;
+            min-width: $cell-width;
             height: $cell-height;
             border: 1px solid rgb(148, 148, 148);
             cursor: pointer;
